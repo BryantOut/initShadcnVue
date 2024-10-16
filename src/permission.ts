@@ -13,13 +13,14 @@ router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   console.log(userStore.firstEnter, to.path, userStore.token);
   // 刷新页面校验登录
-  if (!userStore.token && to.path !== "/login") {
-    next({
-      path: "/login",
-    });
-  } else {
-    next();
-  }
+  // if (!userStore.token && to.path !== "/login") {
+  //   next({
+  //     path: "/login",
+  //   });
+  // } else {
+  //   next();
+  // }
+  next();
   // if (userStore.firstEnter && to.path !== '/login') {
   //   if (userStore.token) {
   //     // 校验登录状态
