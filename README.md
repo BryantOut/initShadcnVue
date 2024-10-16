@@ -10,6 +10,10 @@ npm create vue@latest
 
 [官方网站](https://www.shadcn-vue.com/docs/introduction.html)
 
+## icon组件库lucide-vue-next
+
+[官方网站](https://lucide.dev/icons)
+
 ## 其他笔记
 
 ### npm的--save和--save-dev的区别
