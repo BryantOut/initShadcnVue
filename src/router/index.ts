@@ -1,19 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import loginPage from "./modules/loginPage";
+import mainPage from "./modules/mainPage";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: "/",
-      name: "home",
-      component: import("@/views/home/index.vue"),
-    },
-    {
-      path: "/login",
-      name: "login",
-      component: () => import("@/views/login/index.vue"),
-    },
-  ],
+  routes: [...loginPage, ...mainPage],
 });
 
 export default router;
