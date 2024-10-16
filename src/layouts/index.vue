@@ -1,25 +1,9 @@
 <script setup lang="ts">
-import {
-  CircleUser,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  ShieldCheck,
-  ShoppingCart,
-  Users,
-} from "lucide-vue-next";
+import { CircleUser, Package2 } from "lucide-vue-next";
+import { computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,7 +12,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import mainPage from "@/router/modules/mainPage";
+
+// 提取每一项的 children，并更新 path
+const newChildren = mainPage.flatMap((route) => {
+  if (route.children) {
+    return route.children.map((child) => ({
+      ...child,
+      path: `${route.path}/${child.path}`, // 构建新的 path
+    }));
+  }
+  return [];
+});
+
+const route = useRoute();
+
+const activeRoutePath = computed(() => {
+  return route.path;
+});
+
+onMounted(() => {
+  // console.log(activePathName);
+});
 </script>
 
 <template>
@@ -45,22 +50,17 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
         </div>
         <div class="flex-1">
           <nav class="grid items-start px-2 text-sm font-medium lg:px-4">
-            <RouterLink to="/">
-              <div
-                class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary bg-muted"
-              >
-                <Home class="h-4 w-4" />
-                Dashboard
-              </div>
-            </RouterLink>
-            <RouterLink to="/modifyPwd">
-              <div
-                class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <ShieldCheck class="h-4 w-4" />
-                修改密码
-              </div>
-            </RouterLink>
+            <template v-for="(item, index) in newChildren" :key="index">
+              <RouterLink :to="item.path">
+                <div
+                  :class="{ 'bg-muted': activeRoutePath === item.path }"
+                  class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                >
+                  <component :is="item.meta.icon" class="h-4 w-4"></component>
+                  {{ item.meta.title }}
+                </div>
+              </RouterLink>
+            </template>
           </nav>
         </div>
       </div>
@@ -69,76 +69,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
       <header
         class="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6"
       >
-        <Sheet>
-          <SheetTrigger as-child>
-            <Button variant="outline" size="icon" class="shrink-0 md:hidden">
-              <Menu class="h-5 w-5" />
-              <span class="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" class="flex flex-col">
-            <nav class="grid gap-2 text-lg font-medium">
-              <a href="#" class="flex items-center gap-2 text-lg font-semibold">
-                <Package2 class="h-6 w-6" />
-                <span class="sr-only">Acme Inc</span>
-              </a>
-              <a
-                href="#"
-                class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-              >
-                <Home class="h-5 w-5" />
-                Dashboard
-              </a>
-              <a
-                href="#"
-                class="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-              >
-                <ShoppingCart class="h-5 w-5" />
-                Orders
-                <Badge
-                  class="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
-                >
-                  6
-                </Badge>
-              </a>
-              <a
-                href="#"
-                class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-              >
-                <Package class="h-5 w-5" />
-                Products
-              </a>
-              <a
-                href="#"
-                class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-              >
-                <Users class="h-5 w-5" />
-                Customers
-              </a>
-              <a
-                href="#"
-                class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-              >
-                <LineChart class="h-5 w-5" />
-                Analytics
-              </a>
-            </nav>
-            <div class="mt-auto">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Upgrade to Pro</CardTitle>
-                  <CardDescription>
-                    Unlock all features and get unlimited access to our support
-                    team.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button size="sm" class="w-full"> Upgrade </Button>
-                </CardContent>
-              </Card>
-            </div>
-          </SheetContent>
-        </Sheet>
         <div class="w-full flex-1"></div>
         <DropdownMenu>
           <DropdownMenuTrigger as-child>

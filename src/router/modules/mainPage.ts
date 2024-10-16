@@ -1,14 +1,16 @@
+import { Home, ShieldCheck } from "lucide-vue-next";
+
 export default [
   {
-    path: "/",
+    path: "/home",
     name: "home",
     component: import("@/layouts/index.vue"),
-    redirect: "/index",
+    redirect: "/home/index",
     children: [
       {
         path: "index",
         component: () => import("@/views/home/index.vue"),
-        meta: { title: "首页" },
+        meta: { title: "首页", icon: Home },
       },
     ],
   },
@@ -21,7 +23,7 @@ export default [
       {
         path: "index",
         component: () => import("@/views/modifyPwd/index.vue"),
-        meta: { title: "修改密码" },
+        meta: { title: "修改密码", icon: ShieldCheck },
       },
     ],
   },
